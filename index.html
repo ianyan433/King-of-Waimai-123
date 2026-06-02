@@ -13,10 +13,10 @@
     /* 顶部状态栏 */
     .status-bar { height: 28px; background: #fff; display: flex; justify-content: space-between; align-items: center; padding: 0 22px; font-size: 12px; font-weight: 600; z-index: 100; border-bottom: 1px solid #eef; }
     
-    /* 桌面：2x2 经典双排图标 */
+    /* 桌面：换回原本经典的简约暗色纯色背景 */
     #home-screen { 
-        background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="375" height="760" viewBox="0 0 375 760"><rect width="100%" height="100%" fill="%2387a987"/><path d="M120 760 C150 500, 220 500, 255 760 Z" fill="%234a3728"/><circle cx="187" cy="460" r="35" fill="%23e0ac9d"/><path d="M160 470 C160 410, 214 410, 214 470 Z" fill="%231a1a1a"/><path d="M152 495 Q187 470 222 495 L240 650 L135 650 Z" fill="%23b33939"/><path d="M140 350 L120 200 L250 250 Z" fill="%2378e08f" opacity="0.3"/></svg>') no-repeat center center; 
-        background-size: cover; padding: 60px 25px 0 25px; display: none; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 110px; gap: 20px; 
+        background: #21212e; 
+        padding: 60px 25px 0 25px; display: none; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 110px; gap: 20px; 
     }
     #home-screen.active { display: grid; }
     .app-wrapper { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
@@ -25,7 +25,7 @@
     .app-chat { background: linear-gradient(135deg, #00c6ff, #0072ff); }
     .app-bank { background: linear-gradient(135deg, #e52d27, #b31217); }
     .app-gamble { background: linear-gradient(135deg, #11998e, #38ef7d); }
-    .icon-label { margin-top: 8px; color: #fff; text-shadow: 1px 1px 4px rgba(0,0,0,0.9); font-size: 12px; font-weight: bold; }
+    .icon-label { margin-top: 8px; color: #bbb; font-size: 12px; font-weight: bold; }
     .badge { position: absolute; top: -4px; right: -4px; background: #ff3b30; color: white; border-radius: 10px; padding: 1px 6px; font-size: 10px; font-weight: bold; }
 
     /* 通用头部 */
@@ -45,7 +45,6 @@
     
     /* 大数据档案 */
     .buyer-profile { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px; margin: 6px 0; font-size: 11px; color: #334155; }
-    .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
 
     .order-title { font-size: 14px; font-weight: bold; color: #1e293b; margin: 4px 0; }
     .order-note { font-size: 11px; color: #b45309; background: #fef3c7; padding: 6px 8px; border-radius: 6px; margin: 6px 0; }
@@ -199,7 +198,7 @@
     <div id="day-end-modal" class="modal-overlay">
         <div class="modal-content">
             <div style="color:#10b981; font-weight:bold; font-size:16px; margin-bottom:12px;">📊 每日流水简报</div>
-            <div class="settle-row"><span>今日最终卡内资产：</span><span id="settle-total" style="font-weight:bold;">￥0</span></div>
+            <div class="settle-row"><span>当前卡内资产：</span><span id="settle-total" style="font-weight:bold;">￥0</span></div>
             <button class="btn btn-accept" style="width:100%; margin-top:15px;" onclick="startNextDay()">高强度睡眠（进入明天）</button>
         </div>
     </div>
@@ -225,19 +224,19 @@ const namesPool = ["张强", "李芳", "王勇", "刘梅", "钱伟", "赵静"];
 const shopNames = ["至尊黄焖鸡", "老城螺蛳粉", "深夜小烧烤", "原神奶茶店"];
 const orderTitles = ["近距离便利单", "住宅区午餐单", "高档写字楼单", "加急重金悬赏单"];
 
-// --- 核心逻辑重构：溢价博弈模型 ---
+// --- 完美核心博弈模型 ---
 function generateThreeOrders() {
     currentOrders = [];
     for (let i = 0; i < 3; i++) {
         const mName = shopNames[Math.floor(Math.random() * shopNames.length)];
         const bName = namesPool[Math.floor(Math.random() * namesPool.length)];
         
-        // 隐晦模型：1星号具有毁灭性的骗子概率，但是自带极其诱人的天价，博弈性极强！
+        // 核心逻辑：星级越低，越没人接，迫使买家挂出逆天悬赏高价，允许玩家对赌！
         const profiles = [
             { desc: "核心信誉：⭐⭐⭐⭐⭐ (优质合规账号)", baseReward: 2500, risk: 0.02 },
-            { desc: "核心信誉：⭐⭐⭐⭐ (账号行为正常)", baseReward: 4000, risk: 0.08 },
-            { desc: "核心信誉：⭐⭐ (该用户退款频次偏高)", baseReward: 9500, risk: 0.45 },
-            { desc: "核心信誉：⭐ (触发多次重大争议异常降级)", baseReward: 38000, risk: 0.85 } // 15%几率成功赚取3万8，85%几率血亏！
+            { desc: "核心信誉：⭐⭐⭐⭐ (账号行为正常)", baseReward: 4200, risk: 0.08 },
+            { desc: "核心信誉：⭐⭐ (该用户近期退款频次高)", baseReward: 9800, risk: 0.45 },
+            { desc: "核心信誉：⭐ (触发多次异常降级黑产嫌疑)", baseReward: 35000, risk: 0.88 } // 88%亏，但有12%概率直接白赚3万5！
         ];
         
         const selectedProfile = profiles[Math.floor(Math.random() * profiles.length)];
@@ -245,7 +244,7 @@ function generateThreeOrders() {
         let finalRisk = selectedProfile.risk;
         let finalReward = selectedProfile.baseReward + Math.floor(Math.random() * 2000);
         
-        // 如果买家上了群组黑名单，风险无限大，但为了诱惑骑手，佣金再次飙升
+        // 黑名单联动机制
         if(storyFlags.blacklisted_user === bName || storyFlags.blacklisted_shop === mName) {
             finalRisk = 0.95;
             finalReward += 15000;
@@ -257,9 +256,9 @@ function generateThreeOrders() {
         currentOrders.push({
             merchant: mName,
             buyerName: bName,
-            title: finalRisk > 0.5 ? "🔥 特异天价赌博单" : orderTitles[Math.floor(Math.random() * orderTitles.length)],
+            title: finalRisk > 0.5 ? "🔥 极度危险天价单" : orderTitles[Math.floor(Math.random() * orderTitles.length)],
             reward: finalReward, 
-            reportReward: Math.floor(finalReward * 0.03) + 200, // 机制平衡：举报只能拿极其微薄的固定反诈死工资
+            reportReward: Math.floor(finalReward * 0.03) + 200, // 举报奖励极低，不影响送单赚钱
             cost: Math.floor(Math.random() * 5) + 12,
             profileText: selectedProfile.desc,
             noteText: note,
@@ -275,11 +274,11 @@ function renderOrders() {
     
     currentOrders.forEach((order, index) => {
         html += `
-            <div class="order-card" style="${order.riskRate > 0.5 ? 'border: 2px dashed #ef4444; background: #fff8f8;' : ''}">
+            <div class="order-card" style="${order.riskRate > 0.5 ? 'border: 1px dashed #ef4444; background: #fffbfb;' : ''}">
                 <div class="order-header"><span>商家：${order.merchant}</span><span>买家：${order.buyerName}</span></div>
                 <div class="order-title">${order.title}</div>
                 <div class="buyer-profile">
-                    <div>用户大数据特征：<b>${order.profileText}</b></div>
+                    <div>大数据特征：<b>${order.profileText}</b></div>
                 </div>
                 <div class="order-note">📝 订单备注：${order.noteText}</div>
                 <div class="order-footer">
@@ -302,17 +301,15 @@ function selectOrder(index) {
     
     stamina -= order.cost;
     
-    // 决定生死的核心博弈判定：即便是1星，依然有概率直接暴富安全送达！
+    // 决定输赢对赌的判定
     if (Math.random() < order.riskRate) {
-        // 赌输了：黑产碰瓷申请退款，倒扣本金和极高额处罚
         let loss = Math.floor(order.reward * 1.1);
         money = Math.max(0, money - loss);
-        document.getElementById('event-desc').innerText = `【赌输了！】买家【${order.buyerName}】在收货后使出黑产手段恶意申诉“食品变质/未送达”强行吃白嫖餐。你博弈失败，反被扣除高达 ￥${loss.toLocaleString()} 的履约金和罚款！`;
+        document.getElementById('event-desc').innerText = `【赌输了！】买家【${order.buyerName}】在收货后使用黑产手段申请“未收到餐”进行白嫖。你对赌失败，反被扣除高达 ￥${loss.toLocaleString()} 的违约罚款！`;
         document.getElementById('event-modal').style.display = 'flex';
     } else {
-        // 赌赢了：1星号也是老实吃了一回饭，惊险拿到巨额悬赏！
         money += order.reward;
-        showFloatText(`💰【赌赢了！！】惊险过关！你顶着极高的黑产风险安全把餐送到，疯狂斩获天价配送费 ￥${order.reward.toLocaleString()}！`);
+        showFloatText(`💰【对赌成功！！】心跳大捷！1星号也是要吃热饭的！你惊险突破封锁，稳稳赚下天价配送费 ￥${order.reward.toLocaleString()}！`);
         nextAction();
     }
 }
@@ -321,11 +318,11 @@ function reportOrder(index) {
     const order = currentOrders[index];
     if (order.riskRate >= 0.4) {
         money += order.reportReward;
-        showFloatText(`🎉 举报成功。虽然成功规避了骗子，但平台只给你发了极低的固定反诈死奖金：+￥${order.reportReward}`);
+        showFloatText(`🎉 举报核实成功。你规避了风险，获得微薄的反诈补贴：+￥${order.reportReward}`);
     } else {
         let fine = 1500;
         money = Math.max(0, money - fine);
-        showFloatText(`❌ 恶意虚假举报！经查该单为正常用户。你被平台反向罚款：-￥${fine}`);
+        showFloatText(`❌ 虚假恶意举报！经查该单为合规用户。你被平台扣款：-￥${fine}`);
     }
     nextAction();
 }
@@ -333,7 +330,7 @@ function reportOrder(index) {
 function closeEvent() { document.getElementById('event-modal').style.display = 'none'; nextAction(); }
 function nextAction() { actionsLeft--; updateUI(); if (actionsLeft <= 0) showDayEndSettlement(); else generateThreeOrders(); }
 
-// --- 15话长篇分支剧情逻辑线 ---
+// --- 15话完整逻辑长篇故事线 ---
 function getChatStory(type, stage) {
     if (type === 'cuihua') {
         if (storyFlags.cuihua_status === "normal") {
@@ -344,10 +341,10 @@ function getChatStory(type, stage) {
                 7: { t: "老家打电话来，说我爸气病了，骂我不孝。老公，我顶着好大压力啊。", opts: [{r:"寄2000块钱回去给叔叔看病，算我的！", fx:"money-=2000;", next:"normal"}, {r:"别理他们，他们就是想要钱。", fx:"", next:"angry"}] },
                 9: { t: "房东今天来催房租了，说再不交就把行李扔出去，你在外面发工资了吗？", opts: [{r:"别急，卡里有钱，立刻转1500给你交房租。", fx:"money-=1500;", next:"normal"}] },
                 11: { t: "省城消费太高了，我今天买菜看中一件衣服都没舍得买，好怀念在村里的日子。", opts: [{r:"等赚够100万撤离这个鬼地方，我给你买最好的！", fx:"", next:"normal"}] },
-                13: { t: "大拿突然来省城找我了，说只要我回去，以前的事既往不咎，还给我爸买全套理疗仪。", opts: [{r:"让他滚！你是我的！", fx:"stamina+=20;", next:"normal"}, {r:"如果你觉得跟着他更幸福，我不拦你。", fx:"", next:"broken"}] },
+                13: { t: "大拿突然来省城找我了，说只要我回去，以前的事既往不咎，还给我爸买全套理疗仪。", opts: [{r:"让滚！你是我的！", fx:"stamina+=20;", next:"normal"}, {r:"如果你觉得跟着他更幸福，我不拦你。", fx:"", next:"broken"}] },
                 15: { t: "倒数最后几天了，这决定了我们的命运。你卡里到底存到100万了吗？", opts: [{r:"放心，我绝对会带你体面地撤离！", fx:"", next:"normal"}] }
             };
-            return lines[stage] || { t: "注意安全，我做好了晚饭等你回来。", opts:[{r:"知道了工。", fx:"", next:"normal"}] };
+            return lines[stage] || { t: "注意安全，我做好了晚饭等你回来。", opts:[{r:"知道了媳妇。", fx:"", next:"normal"}] };
         }
         if (storyFlags.cuihua_status === "broken") {
             const lines = {
@@ -371,7 +368,7 @@ function getChatStory(type, stage) {
             9: { t: "【外卖小叮当】：家人们，今天运气爆棚，遇到个神仙顾客打赏了500，生活还是有希望的啊！", opts:[{r:"接好运，祝兄弟天天爆单！", fx:"stamina+=15;", next:""}] },
             11: { t: "【群主老鸟】：紧急通知，张强这小子换马甲了，现在大数据综合星级低于两星的都有诈，别瞎接！", opts:[{r:"明白，审查大数据星级更要细心了。", fx:"", next:""}] },
             13: { t: "【同城送药】：今天雨太大摔车了，两千块的胰岛素碎了，有附近兄弟能帮我去站里补个单吗？", opts:[{r:"【仗义相助】地址发我，我去跑一趟！", fx:"money-=1500; stamina-=20;", next:""}, {r:"泥菩萨过河，自身难保，帮不了。", fx:"", next:""}] },
-            15: { t: "【群主老鸟】：月底了，平台在严查恶意白嫖退款的黑户，大伙只要发现异常果断用举报，一抓一个准！", opts:[{r:"收到，最后几天跟黑产战斗到底！", fx:"", next:""}] }
+            15: { t: "【群主老鸟】：月底了，平台在严查恶意白嫖退款的黑户，大伙发现异常果断用举报！", opts:[{r:"收到，最后几天跟黑产战斗到底！", fx:"", next:""}] }
         };
         return groupLines[stage] || { t: "【群主】：下雨路滑，兄弟们跑单注意安全，安全第一！", opts:[{r:"收到！", fx:"", next:""}] };
     }
@@ -395,7 +392,7 @@ function getChatStory(type, stage) {
             return { t: "大获成功！兄弟，10万块利息已经打进你手机银行！出来吃高档海鲜烧烤！", opts:[{r:"握草！铁柱你是真的神！", fx:"money+=100000; stamina+=30;", next:""}] };
         }
         if (storyFlags.brother_status === "jail") {
-            return { t: "（对方由于触犯法律被强制执行，无法接收您的消息。多行不义必自毙。）", opts:[{r:"引以为戒，还是踏实干外卖吧。", fx:"", next:""}] };
+            return { t: "（对方由于触犯法律被强制执行，无法接收您的消息。）", opts:[{r:"引以为戒，还是踏实干外卖吧。", fx:"", next:""}] };
         }
     }
 }
@@ -404,8 +401,8 @@ let hasChattedToday = false;
 
 function enterChatRoom(type) {
     document.getElementById('badge-' + type).style.display = 'none';
-    document.getElementById('chat-list-view').parentElement.classList.remove('active');
     const room = document.getElementById('chat-room-app');
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     room.classList.add('active');
     
     const titles = { cuihua: "翠花 (未婚妻)", group: "骑士情报群", brother: "铁柱 (好兄弟)" };
@@ -416,7 +413,7 @@ function enterChatRoom(type) {
     box.innerHTML = '';
     
     if (day % 2 === 0 || hasChattedToday) {
-        optArea.innerHTML = `<div style="text-align:center; color:#999; font-size:11px; padding:6px;">[提示] 对方今天不在线，单数天（如第3,5,7天）才能触发核心剧情交流。</div>`;
+        optArea.innerHTML = `<div style="text-align:center; color:#999; font-size:11px; padding:6px;">[提示] 对方今天不在线，单数天（如第3,5,7天）才能进行核心剧情交互。</div>`;
         return;
     }
     
@@ -475,7 +472,7 @@ function startNextDay() {
     }
     
     if (day > 30) {
-        alert(money >= 1000000 ? `🎉 达成大结局【百万撤离】：你最终存够了￥${money.toLocaleString()}！你开着豪车回村，高调迎娶翠花，彻底退出了外卖江湖！` : `😭 达成残酷结局【大雨婚礼】：30天满，你只攒到了￥${money.toLocaleString()}。翠花坐在了大拿的迎亲车上，你看着背影在雨中痛哭...`);
+        alert(money >= 1000000 ? `🎉 达成大结局【百万撤离】：你最终存够了￥${money.toLocaleString()}！彻底退出了外卖江湖！` : `😭 达成残酷结局：30天满，你只攒到了￥${money.toLocaleString()}，无法完成百万撤离...`);
         location.reload();
     } else {
         updateUI();

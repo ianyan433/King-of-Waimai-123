@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>外卖大亨：百万撤离</title>
+<title>百万撤离</title>
 <style>
     body { background-color: #1a1a24; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; user-select: none; }
     #phone { width: 375px; height: 760px; background: #000; border-radius: 45px; border: 12px solid #333; position: relative; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.6); }
@@ -13,17 +13,17 @@
     /* 顶部状态栏 */
     .status-bar { height: 28px; background: #fff; display: flex; justify-content: space-between; align-items: center; padding: 0 22px; font-size: 12px; font-weight: 600; z-index: 100; border-bottom: 1px solid #eef; }
     
-    /* 桌面 */
-    #home-screen { background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=375&auto=format&fit=crop') no-repeat center center; background-size: cover; padding: 40px 20px 0 20px; display: none; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 90px; gap: 15px; }
+    /* 桌面优化：2x2 双排精美布局，完美适配各种屏幕 */
+    #home-screen { background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=375&auto=format&fit=crop') no-repeat center center; background-size: cover; padding: 60px 25px 0 25px; display: none; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 110px; gap: 20px; }
     #home-screen.active { display: grid; }
     .app-wrapper { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
-    .app-icon { width: 56px; height: 56px; border-radius: 14px; display: flex; justify-content: center; align-items: center; color: white; font-size: 20px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.1s; position: relative; }
+    .app-icon { width: 62px; height: 62px; border-radius: 16px; display: flex; justify-content: center; align-items: center; color: white; font-size: 22px; font-weight: bold; box-shadow: 0 6px 16px rgba(0,0,0,0.3); transition: transform 0.1s; position: relative; }
     .app-icon:active { transform: scale(0.9); }
-    .app-waimai { background: linear-gradient(135deg, #ff9900, #ff5500); }
+    .app-waimai { background: linear-gradient(135deg, #0088ff, #0055ff); }
     .app-chat { background: linear-gradient(135deg, #00c6ff, #0072ff); }
     .app-bank { background: linear-gradient(135deg, #e52d27, #b31217); }
     .app-gamble { background: linear-gradient(135deg, #11998e, #38ef7d); }
-    .icon-label { margin-top: 6px; color: #fff; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); font-size: 11px; text-align: center; font-weight: 500; }
+    .icon-label { margin-top: 8px; color: #fff; text-shadow: 1px 1px 4px rgba(0,0,0,0.9); font-size: 12px; text-align: center; font-weight: bold; }
     .badge { position: absolute; top: -4px; right: -4px; background: #ff3b30; color: white; border-radius: 10px; padding: 1px 6px; font-size: 10px; font-weight: bold; }
 
     /* 通用APP头部 */
@@ -33,30 +33,31 @@
     /* 核心看板 */
     .dashboard { display: flex; justify-content: space-between; padding: 10px 15px; background: #fff; border-bottom: 1px solid #e2e8f0; font-size: 12px; shrink: 0; }
     .stat-item { text-align: center; }
-    .stat-val { font-size: 15px; font-weight: 800; color: #ff5500; }
+    .stat-val { font-size: 15px; font-weight: 800; color: #0055ff; }
     
     /* 抢单大厅 */
     #order-container { flex: 1; overflow-y: auto; padding-bottom: 15px; background: #f7f9fa; }
     .pool-banner { font-size: 11px; color: #64748b; text-align: center; padding: 6px 0; background: #e2e8f0; font-weight: 600; }
     
-    /* 大改版：带风控资料的订单卡片 */
+    /* 订单卡片 */
     .order-card { background: #fff; margin: 10px 12px; border-radius: 14px; padding: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; }
     .order-header { display: flex; justify-content: space-between; font-size: 12px; color: #64748b; font-weight: bold; margin-bottom: 6px;}
     .order-tag { background: #ff5500; color: white; font-size: 9px; padding: 1px 4px; border-radius: 4px; }
     
-    /* 买家风控资料卡 */
+    /* 改版：去掉了冗余字样的简练档案 */
     .buyer-profile { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 8px; margin: 6px 0; font-size: 12px; color: #334155; }
-    .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 4px; font-size: 11px;}
+    .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 11px;}
     .risk-alert { color: #ef4444; font-weight: bold; }
     .risk-safe { color: #10b981; font-weight: bold; }
 
     .order-title { font-size: 14px; font-weight: bold; color: #1e293b; margin: 4px 0; }
     .order-note { font-size: 12px; color: #b45309; background: #fef3c7; padding: 6px 8px; border-radius: 6px; margin: 6px 0; border-left: 3px solid #d97706; }
-    .order-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
-    .order-reward { font-size: 16px; font-weight: 800; color: #10b981; }
+    .order-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; gap: 4px; }
+    .order-reward { font-size: 16px; font-weight: 800; color: #10b981; flex: 1; }
     
-    .btn { padding: 8px 14px; border: none; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; color: white; }
-    .btn-accept { background: #ff5500; }
+    .btn { padding: 8px 10px; border: none; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; color: white; }
+    .btn-accept { background: #0055ff; }
+    .btn-report { background: #ef4444; }
     .btn-reject { background: #64748b; }
     
     /* QQ 应用框架层 */
@@ -84,7 +85,7 @@
     .gamble-ctrls { display: flex; gap: 6px; flex-wrap: wrap;}
     .g-btn { flex: 1; padding: 6px 10px; font-size: 11px; font-weight: bold; border-radius: 6px; border: none; cursor: pointer; color: white;}
     
-    /* 弹窗机制 */
+    /* 弹窗 */
     .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 1000; }
     .modal-content { background: white; width: 85%; border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); box-sizing: border-box; max-height: 85%; overflow-y: auto;}
     .event-title { color: #ef4444; font-size: 18px; font-weight: bold; margin-bottom: 10px; }
@@ -103,11 +104,11 @@
         <span>5G 🔋 99%</span>
     </div>
 
-    <!-- 智能桌面 -->
+    <!-- 智能桌面：优化为双排图标 -->
     <div id="home-screen" class="screen active">
         <div class="app-wrapper" onclick="openApp('delivery-app')">
             <div class="app-icon app-waimai">饿</div>
-            <div class="icon-label">饿死么众包</div>
+            <div class="icon-label">饿死么</div>
         </div>
         <div class="app-wrapper" onclick="openApp('chat-index-app')">
             <div class="app-icon app-chat">
@@ -127,7 +128,7 @@
 
     <!-- QQ 列表主页 -->
     <div id="chat-index-app" class="screen">
-        <div class="app-header"><span>QQ (2026版)</span></div>
+        <div class="app-header"><span>QQ</span></div>
         <div id="chat-list-view">
             <div class="chat-item" onclick="enterChatRoom('cuihua')">
                 <div class="chat-avatar" style="background:#ff7675;">翠</div>
@@ -170,42 +171,39 @@
         <div class="chat-footer" id="chat-options-area"></div>
     </div>
 
-    <!-- 财富密码App (菠菜小游戏) -->
+    <!-- 财富密码App -->
     <div id="gamble-app" class="screen">
-        <div class="app-header"><span class="back-btn" onclick="openApp('home-screen')">←</span> 财富密码（海外加密版）</div>
+        <div class="app-header"><span class="back-btn" onclick="openApp('home-screen')">←</span> 财富密码</div>
         <div style="background:#0f172a; color:#38ef7d; padding:15px; font-size:11px; font-weight:bold;">
-            ⚠️ 本软件属于高风险测试工具，盈亏自负！现存账户余额：￥<span id="gamble-money-display">0</span>
+            现存账户余额：￥<span id="gamble-money-display">0</span>
         </div>
         <div class="gamble-menu">
-            <!-- 游戏1 -->
             <div class="gamble-card">
                 <div class="gamble-title"><span>✊✌️✋ 1. 赛博猜拳大战</span><span style="color:#38ef7d;">赔率 1:2</span></div>
-                <div class="gamble-desc">经典的石头剪刀布，纯粹的心理博弈。赢了押注翻倍，输了扣除押注。</div>
-                <input type="number" class="gamble-bet-input" id="bet-rps" placeholder="输入押注金额(元)" value="5000">
+                <div class="gamble-desc">赢了押注翻倍，输了扣除押注。</div>
+                <input type="number" class="gamble-bet-input" id="bet-rps" value="5000">
                 <div class="gamble-ctrls">
-                    <button class="g-btn" style="background:#3b82f6;" onclick="playRPS('石头')">出石头 ✊</button>
-                    <button class="g-btn" style="background:#10b981;" onclick="playRPS('剪刀')">出剪刀 ✌️</button>
-                    <button class="g-btn" style="background:#f59e0b;" onclick="playRPS('布')">出布 ✋</button>
+                    <button class="g-btn" style="background:#3b82f6;" onclick="playRPS('石头')">✊ 石头</button>
+                    <button class="g-btn" style="background:#10b981;" onclick="playRPS('剪刀')">✌️ 剪刀</button>
+                    <button class="g-btn" style="background:#f59e0b;" onclick="playRPS('布')">✋ 布</button>
                 </div>
             </div>
-            <!-- 游戏2 -->
             <div class="gamble-card">
                 <div class="gamble-title"><span>🎲 2. 疯狂骰子比大小</span><span style="color:#38ef7d;">赔率 1:2</span></div>
-                <div class="gamble-desc">系统投掷一枚密封六面骰子。1-3点为小，4-6点为大。</div>
-                <input type="number" class="gamble-bet-input" id="bet-dice" placeholder="输入押注金额(元)" value="10000">
+                <div class="gamble-desc">1-3点为小，4-6点为大。</div>
+                <input type="number" class="gamble-bet-input" id="bet-dice" value="10000">
                 <div class="gamble-ctrls">
-                    <button class="g-btn" style="background:#ef4444; padding:8px;" onclick="playDice('大')">买大 (4-6点) 📈</button>
-                    <button class="g-btn" style="background:#6366f1; padding:8px;" onclick="playDice('小')">买小 (1-3点) 📉</button>
+                    <button class="g-btn" style="background:#ef4444; padding:8px;" onclick="playDice('大')">📈 买大</button>
+                    <button class="g-btn" style="background:#6366f1; padding:8px;" onclick="playDice('小')">📉 买小</button>
                 </div>
             </div>
-            <!-- 游戏3 -->
             <div class="gamble-card">
                 <div class="gamble-title"><span>🃏 3. 极速暗牌猜颜色</span><span style="color:#38ef7d;">赔率 1:2</span></div>
-                <div class="gamble-desc">发牌机随机抽出一张扑克牌，盲猜其花色是红色（红桃/方块）还是黑色（黑桃/梅花）。</div>
-                <input type="number" class="gamble-bet-input" id="bet-color" placeholder="输入押注金额(元)" value="20000">
+                <div class="gamble-desc">盲猜花色是红色还是黑色。</div>
+                <input type="number" class="gamble-bet-input" id="bet-color" value="20000">
                 <div class="gamble-ctrls">
-                    <button class="g-btn" style="background:#dc2626; padding:8px;" onclick="playColor('红')">猜红色 ❤️</button>
-                    <button class="g-btn" style="background:#1e293b; padding:8px;" onclick="playColor('黑')">猜黑色 ♠️</button>
+                    <button class="g-btn" style="background:#dc2626; padding:8px;" onclick="playColor('红')">❤️ 红色</button>
+                    <button class="g-btn" style="background:#1e293b; padding:8px;" onclick="playColor('黑')">♠️ 黑色</button>
                 </div>
             </div>
         </div>
@@ -221,18 +219,18 @@
         </div>
     </div>
 
-    <!-- 外卖众包APP -->
+    <!-- 外卖APP -->
     <div id="delivery-app" class="screen">
-        <div class="app-header"><span class="back-btn" onclick="openApp('home-screen')">←</span> 饿死么众包 - 实时大厅</div>
+        <div class="app-header"><span class="back-btn" onclick="openApp('home-screen')">←</span> 饿死么 - 抢单大厅</div>
         <div class="dashboard">
             <div class="stat-item"><div>时间进度</div><div class="stat-val">第 <span id="ui-day">1</span>/30 天</div></div>
             <div class="stat-item"><div>今日体力</div><div class="stat-val"><span id="ui-stamina">100</span>/100</div></div>
-            <div class="stat-item"><div>今日决策</div><div class="stat-val"><span id="ui-orders">10</span> 次</div></div>
+            <div class="stat-item"><div>剩余决策</div><div class="stat-val"><span id="ui-orders">10</span> 次</div></div>
         </div>
         <div id="order-container"></div>
     </div>
 
-    <!-- 突发黑产/风控事件弹窗 -->
+    <!-- 突发事件弹窗 -->
     <div id="event-modal" class="modal-overlay">
         <div class="modal-content" style="border: 2px solid #ef4444;">
             <div class="event-title" id="event-popup-title">🚨 遭遇突发状况！</div>
@@ -265,7 +263,7 @@
             <div class="event-desc" id="end-desc" style="font-size:13px; line-height:1.6;"></div>
             <h4 style="text-align:left; margin:10px 0 5px 0; color:#ff5500;">🏆 结算成就：</h4>
             <div class="achieve-list" id="achieve-list"></div>
-            <button class="btn btn-accept" style="width:100%; margin-top:15px;" onclick="location.reload()">不服气！重新逆袭</button>
+            <button class="btn btn-accept" style="width:100%; margin-top:15px;" onclick="location.reload()">重新逆袭</button>
         </div>
     </div>
 
@@ -274,12 +272,12 @@
 <script>
 // --- 全局核心数据 ---
 let day = 1;
-let money = 2000; // 提高初始资金便于中后期滚雪球或菠菜
+let money = 2000; 
 let stamina = 100;
 let actionsLeft = 10;
 let currentOrders = [];
 
-// 群聊爆料风控池 (动态更新，玩家不看群可能不知道踩雷)
+// 群聊爆料风控池
 let blacklistedBuyer = ""; 
 let blacklistedMerchant = "";
 
@@ -293,28 +291,30 @@ let hasChattedToday = { cuihua: false, group: false, brother: false };
 let chatBadgeStates = { cuihua: true, group: true, brother: true };
 
 // 统计用维度
-let stats = { totalOrders: 0, scamFines: 0, scamAvoided: 0, gambleWins: 0, gambleLosses: 0, friendHelpEarn: 0 };
+let stats = { totalOrders: 0, scamFines: 0, scamAvoided: 0, gambleWins: 0, gambleLosses: 0, successfulReports: 0 };
 
-// 历史聊天树记录缓存
+// 历史聊天树
 let chatHistories = {
     cuihua: [{ sender: 'them', text: '跑单辛苦了老公，我刚在纺织厂加完班。今天刘婶又带人来我家了，我心里好慌……' }],
     group: [{ sender: 'them', text: '【群公告】每天出门前刷一下群消息，互相通个气，现在吃外卖霸王餐和钓鱼执法的黑产买家太多了！' }],
     brother: [{ sender: 'them', text: '铁子，在外面日晒雨淋的太遭罪了，哥们最近找到个绝密新路子，回本极快，有兴趣聊聊不？' }]
 };
 
-// --- 买家画像大库 ---
+// --- 买家与易懂订单库 ---
 const namesPool = ["张强", "李丽", "王大锤", "赵少爷", "刘女士", "陈同学", "小莫", "钱总", "吴大妈", "周PD"];
 const jobsPool = ["失业青年", "在校大专生", "大厂前端程序员", "高档夜场公关", "公司财务总监", "职业羊毛党", "退休独居老人", "带货小网红"];
+// 更换为可辅助判断的直观数据
 const historyLabels = [
-    { text: "优良，无退款历史", risk: 0.02, desc: "非常安全的完美买家。" },
-    { text: "普通，极少产生餐损", risk: 0.08, desc: "偶尔因为配送延误给中评。" },
-    { text: "高危！频繁投诉少餐漏餐", risk: 0.45, desc: "吃霸王餐老手，碰瓷概率极大！" },
-    { text: "极度危险！封号边缘老赖", risk: 0.85, desc: "大概率是黑产或故意找茬勒索！" }
+    { text: "近半年退款 0 次 (老实客户)", risk: 0.02 },
+    { text: "近半年退款 1 次 (偶有延误)", risk: 0.08 },
+    { text: "近10单退款 4 次 (疑似白嫖党)", risk: 0.45 },
+    { text: "恶意索赔被警告 3 次 (极高危黑户)", risk: 0.85 }
 ];
 
 const shopNames = ["至尊黄焖鸡", "深夜疯狂烧烤", "金牌香辣小龙虾", "地下城螺蛳粉", "原神主题奶茶店", "皇家鲍鱼捞饭"];
+// 好理解的订单名字
+const easyOrderTitles = ["附近临街小吃单", "高档写字楼奶茶单", "居民区深夜烧烤单", "加急大牌档夜宵单"];
 
-// 备注大库
 const normalNotes = [
     { text: "放外卖柜就行，谢谢帅哥。", riskMod: -0.05 },
     { text: "加辣加麻！不要葱蒜！", riskMod: 0 },
@@ -326,7 +326,7 @@ const trapNotes = [
     { text: "帮我去隔壁便利店带两条中华烟和一箱红牛，垫付一下，到付给你现金。不带直接退单。", riskMod: 0.5 }
 ];
 
-// --- 订单生成系统（包含黑产风控指标） ---
+// --- 订单生成系统 ---
 function generateThreeOrders() {
     currentOrders = [];
     for (let i = 0; i < 3; i++) {
@@ -339,7 +339,6 @@ function generateThreeOrders() {
         const isTrap = Math.random() < 0.4;
         const noteObj = isTrap ? trapNotes[Math.floor(Math.random() * trapNotes.length)] : normalNotes[Math.floor(Math.random() * normalNotes.length)];
         
-        // 基础价格与平衡调整：加快进度，金额拉高到 2000-8000 基础，15% 几率刷出 30000-60000 暴富特级单
         let baseMoney = Math.floor(Math.random() * 6000) + 3000;
         let baseCost = Math.floor(Math.random() * 10) + 10;
         let isSpecial = Math.random() < 0.18;
@@ -349,19 +348,19 @@ function generateThreeOrders() {
             baseCost = Math.floor(Math.random() * 15) + 20;
         }
 
-        // 风控核心：计算此单实际欺诈投诉率
         let finalRisk = hLabel.risk + noteObj.riskMod;
-        // 如果买家名字或者商家正好是QQ群爆料的黑名单，欺诈率直接爆表到 95%！
         if ((blacklistedBuyer && bName.includes(blacklistedBuyer)) || (blacklistedMerchant && merchant === blacklistedMerchant)) {
             finalRisk = 0.95;
-            baseMoney *= 1.5; // 黑名单单子往往伴随极高价格诱惑！
+            baseMoney *= 1.5; 
         }
         if (finalRisk < 0) finalRisk = 0.01;
         if (finalRisk > 0.99) finalRisk = 0.99;
 
+        const normalTitle = easyOrderTitles[Math.floor(Math.random() * easyOrderTitles.length)];
+
         currentOrders.push({
             merchant: merchant,
-            title: isSpecial ? "🔥 特级溢价高额派单" : "🛵 众包常规实时单",
+            title: isSpecial ? "🔥 特级加急高薪单" : "🛵 " + normalTitle,
             reward: baseMoney,
             cost: baseCost,
             buyer: { name: bName, age: bAge, job: bJob, history: hLabel.text },
@@ -375,7 +374,7 @@ function generateThreeOrders() {
 
 function renderOrders() {
     const container = document.getElementById('order-container');
-    let html = `<div class="pool-banner">📡 派单池已刷新 (请结合QQ群情报审查买家背景资料)</div>`;
+    let html = `<div class="pool-banner">📡 派单池已刷新 (请结合群聊情报与历史退款率判断)</div>`;
     
     currentOrders.forEach((order, index) => {
         const riskPercent = Math.round(order.riskRate * 100);
@@ -383,31 +382,26 @@ function renderOrders() {
         if(riskPercent > 25) riskColorClass = "risk-alert";
         
         html += `
-            <div class="order-card" style="${order.isSpecial ? 'border: 2px solid #ff5500; background: #fffcf9;' : ''}">
+            <div class="order-card" style="${order.isSpecial ? 'border: 2px solid #0055ff; background: #fffcf9;' : ''}">
                 <div class="order-header">
                     <span>📍 出餐商家：${order.merchant}</span>
-                    ${order.isSpecial ? '<span class="order-tag">大额高薪单</span>' : ''}
+                    ${order.isSpecial ? '<span class="order-tag" style="background:#0055ff;">重金悬赏</span>' : ''}
                 </div>
                 <div class="order-title">${order.title} #${index + 1}</div>
                 
-                <!-- 买家征信资料卡 -->
                 <div class="buyer-profile">
-                    <strong>👤 订餐人风控基础档案：</strong>
                     <div class="profile-grid">
-                        <div>姓名: <b>${order.buyer.name}</b></div>
-                        <div>年龄: <b>${order.buyer.age} 岁</b></div>
-                        <div>职业: <b>${order.buyer.job}</b></div>
-                        <div>征信记录: <span class="${riskColorClass}">${order.buyer.history}</span></div>
+                        <div>订餐客户: <b>${order.buyer.name}</b></div>
+                        <div>年龄/职业: <b>${order.buyer.age}岁 / ${order.buyer.job}</b></div>
+                        <div style="grid-column: span 2;">历史记录: <span class="${riskColorClass}">${order.buyer.history}</span></div>
                     </div>
                 </div>
                 
                 <div class="order-note">📝 客户备注：${order.note}</div>
                 <div class="order-footer">
-                    <div>
-                        <div style="font-size:11px; color:#64748b;">体力消耗: <b style="color:#ef4444;">${order.cost}点</b></div>
-                    </div>
                     <div class="order-reward">￥${order.reward.toLocaleString()}</div>
-                    <button class="btn btn-accept" onclick="selectOrder(${index})">确认接单</button>
+                    <button class="btn btn-report" onclick="reportOrder(${index})">🚨 举报</button>
+                    <button class="btn btn-accept" onclick="selectOrder(${index})">确认接单 (-${order.cost}体力)</button>
                 </div>
             </div>
         `;
@@ -415,19 +409,45 @@ function renderOrders() {
     
     html += `
         <div style="padding: 5px 12px 15px 12px;">
-            <button class="btn btn-reject" style="width:100%; padding:10px;" onclick="selectOrder(-1)">⚠️ 全都有诈！原地躺平休息（体力+20，跳过本轮）</button>
+            <button class="btn btn-reject" style="width:100%; padding:10px;" onclick="selectOrder(-1)">⚠️ 有诈不接！原地收工休息（体力+20，跳过本轮）</button>
         </div>
     `;
     container.innerHTML = html;
     container.scrollTop = 0;
 }
 
-// 接单判定
+// 举报异常订单机制
+function reportOrder(index) {
+    const order = currentOrders[index];
+    
+    // 如果风险率较高(有异常记录或属于黑名单或恶劣备注)，则举报成功
+    if (order.riskRate >= 0.35) {
+        let bounty = Math.floor(order.reward * 0.4) + 800; // 成功举报奖励
+        money += bounty;
+        dayEarn += bounty;
+        stats.successfulReports++;
+        showFloatText(`🎉 举报成功！平台核实该单【${order.buyer.name}】涉嫌恶意黑产套利，奖励你反诈猎人奖金 ￥${bounty.toLocaleString()}！`);
+    } else {
+        // 恶意或错误举报老实客户，罚款
+        let penalty = Math.floor(order.reward * 0.3) + 500;
+        money = Math.max(0, money - penalty);
+        showFloatText(`❌ 举报失败！核查该订单为正常消费单。你因“恶意虚假举报”破坏平台生态，被平台重罚：-￥${penalty.toLocaleString()}`);
+    }
+    
+    actionsLeft--;
+    updateUI();
+    if (actionsLeft <= 0) {
+        showDayEndSettlement();
+    } else {
+        generateThreeOrders();
+    }
+}
+
+// 接单配送判定
 function selectOrder(index) {
     if (index === -1) {
-        let recover = 20;
-        stamina = Math.min(100, stamina + recover);
-        showFloatText(`开启防御性躺平，规避潜在风险，恢复了 ${recover} 点体力`);
+        stamina = Math.min(100, stamina + 20);
+        showFloatText(`战略性躺平，规避潜在碰瓷风险，体力 +20`);
         nextAction();
         return;
     }
@@ -442,16 +462,12 @@ function selectOrder(index) {
     dayStaminaCost += order.cost;
     stats.totalOrders++;
     
-    // 核心风险判定骰子
     if (Math.random() < order.riskRate) {
-        // 悲剧发生：触发钓鱼敲诈或差评白嫖
-        let fine = Math.floor(order.reward * (Math.random() * 0.6 + 0.6)); // 罚款极重，甚至倒贴
+        let fine = Math.floor(order.reward * (Math.random() * 0.5 + 0.6));
         money = Math.max(0, money - fine);
         stats.scamFines += fine;
-        
         triggerRiskEvent(order, fine);
     } else {
-        // 成功送达
         money += order.reward;
         dayEarn += order.reward;
         showFloatText(`送单成功！安全送达，净赚 +￥${order.reward}`);
@@ -461,20 +477,13 @@ function selectOrder(index) {
 
 function triggerRiskEvent(order, fine) {
     const title = "⚠️ 恶意黑产与碰瓷事件！";
-    let desc = "";
-    
-    if (order.riskRate > 0.7) {
-        desc = `极度凶险！你接了高危黑户【${order.buyer.name}】的单子。送达时对方声称根本没有收到，反手一个‘未送达’恶意虚假投诉并封锁手机！平台不分青红皂白判定你违规倒卖餐品，直接扣除保证金、餐损及信誉扣款，共计惨赔：-￥${fine.toLocaleString()}。`;
-    } else {
-        desc = `遭遇白嫖碰瓷！买家【${order.buyer.name}】（职业：${order.buyer.job}）利用备注上的漏洞钻空子，咬定你没有帮他垫付代购，或者餐品全洒了，在楼道对你疯狂辱骂，并向工商部门和平台同时发起恶意索赔。你被迫自认倒霉赔钱私了，损失：-￥${fine.toLocaleString()}。`;
-    }
+    let desc = `接了高危订单。买家【${order.buyer.name}】在送达后反手以餐品损坏为由恶意申请极速退款。平台直接扣除餐损及违约款，你惨赔：-￥${fine.toLocaleString()}。`;
     
     document.getElementById('event-popup-title').innerText = title;
     document.getElementById('event-desc').innerText = desc;
     document.getElementById('event-money-effect').innerText = `-￥${fine.toLocaleString()}`;
     document.getElementById('event-money-effect').className = 'neg';
     document.getElementById('event-stamina-effect').innerText = `体力消耗:${order.cost}点`;
-    document.getElementById('event-stamina-effect').className = 'neg';
     
     document.getElementById('event-modal').style.display = 'flex';
 }
@@ -494,56 +503,55 @@ function nextAction() {
     }
 }
 
-// --- QQ 聊天三大逻辑树（包含外卖群风控情报和死党投资故事线） ---
+// --- QQ 真实影响聊天逻辑树 ---
 const cuihuaStories = {
     1: {
-        t: "老公，今天下班在厂门口遇到王大拿了，他故意开着新车卡我电动车。我爸今天喝了二两白酒，又逼我妥协，说纺织厂一个月工资才两千五，跟着你没未来。我把自己关在房间里哭，好想你。",
+        t: "老公，我刚在纺织厂加完班。今天刘婶带大拿来我家了，我爸逼我妥协，说纺织厂一个月工资才两千五，跟着你没未来。我把自己关在房间里哭，好想你。",
         opts: [
-            { r: "坚守住！我今天在城里拼了命跑单，你绝不能向那混蛋低头！", fx: "stamina += 25;", reply: "嗯！我不怕他们！哪怕去县城洗盘子我也只跟着你，我们在外面一定要赢！体力+25" },
-            { r: "要是压力实在太大...大拿家条件确实好，要不你听叔叔的话吧。", fx: "money += 5000; stamina -= 20;", reply: "（系统提示：翠花对你的懦弱感到绝望，把压箱底的5000块年终奖直接转给了你，表示这是最后一次联系）资产+5000，体力-20" }
+            { r: "别怕！我给你打 2000 块生活费，今晚立刻买火车票逃出来找我！", fx: "money -= 2000; stamina += 30; dayEarn -= 2000;", reply: "（系统提示：你当即转去2000元车费。翠花大受感动，对未来重新燃起希望，你浑身充满干劲！）资产-2000，体力+30" },
+            { r: "大拿家条件确实好...要不你听叔叔的话吧，我不想你跟着我受罪了。", fx: "money += 5000; stamina -= 30;", reply: "（系统提示：翠花对你的懦弱彻底绝望，心死之余把积攒的5000元公积金全部转给了你当分手费，随后拉黑了你。）资产+5000，体力-30" }
         ]
     },
     8: {
-        t: "今天厂里设备坏了，扣了我们全车间半天工资。晚上回家看到我妈在偷偷掉眼泪，她说她不图钱，就是怕我们结婚后连孩子奶粉都买不起。老公，你那边进展顺利吗？",
+        t: "今天厂里机器坏了扣了半天工资，回家看到我妈在偷偷掉眼泪。老公，你在外面进展顺利吗？我们真的能凑够彩礼吗？",
         opts: [
-            { r: "告诉妈，我最近抓住了赚钱的窍门，十万火急在攒钱了，别哭！", fx: "stamina += 20;", reply: "妈妈听了之后叹了口气，说让你在外面注意身体，别太拼。体力+20" },
-            { r: "我也很浮躁，天天在这里不是被骗就是被罚，这世界疯了！", fx: "stamina -= 15;", reply: "那……那你要撑住啊，你要是倒下了，我真不知道该怎么办了。体力-15" }
+            { r: "告诉妈，我最近当反诈猎人抓违规单，很快就能攒够！", fx: "stamina += 25;", reply: "真的吗？你注意安全！妈妈听说后给你熬了寄了点家乡土特产，你一定要吃饱。体力+25" },
+            { r: "太难了，天天不是被骗就是被平台罚款，这个世界太疯狂了。", fx: "stamina -= 20; money = Math.max(0, money - 500);", reply: "听你这么说我也好绝望……（你因极度焦虑彻夜难眠，购买了大量安神药物消费500元）资产-500，体力-20" }
         ]
     },
     18: {
-        t: "刘婶今天带人把大拿家的金首饰直接抬到我家客厅了，我爸当场就想签订婚书，我冲过去把桌子掀了，跑到了村口小卖部躲着。你什么时间来接我？",
+        t: "大拿家把金首饰直接抬到我家客厅了，我爸当场就要签婚书，我冲过去把桌子掀了，跑到了村口柴火房躲着。你什么时间来接我？！",
         opts: [
-            { r: "就在这几天！哪怕去网贷或者在财富密码里一把梭哈，我也一定带走你！", fx: "stamina = 100;", reply: "我信你！我今晚就在小卖部柴火房对付一夜，我等你开着豪车回村接我！体力回满！" },
-            { r: "掀桌子太冲动了，万一打伤人怎么办？你要理智点。", fx: "stamina -= 30;", reply: "你现在竟然在责怪我冲动？你变了，你根本不懂我在老家顶着多大的唾沫星子。体力-30" }
+            { r: "我今晚在财富密码里一把梭哈，哪怕倾家荡产我也一定要带你走！", fx: "stamina = 100;", reply: "好！我今晚就在柴火房对付一夜，我把命交给你了！体力瞬间回满！" },
+            { r: "你太冲动了，掀桌子要是打伤人要赔钱的，你能不能理智点？", fx: "stamina -= 40;", reply: "你现在竟然在责怪我？你太让我失望了，你根本不爱我！（你精神遭到重创）体力-40" }
         ]
     }
 };
 
 const groupStories = {
-    // 每天随机给出行情爆料：告诉玩家今天谁是黑名单买家/商家
     1: {
-        t: "【群主老鸟】爆料：今天大伙注意江南小区的【张强（男）】，这小子最近失业了在搞黑产，专门故意给外卖差评白嫖餐费，刷到他的单千万别接！",
-        opts: [{ r: "收到，感谢群主排雷，这就拿小本本记下！", fx: "blacklistedBuyer='张强'; stats.scamAvoided++;", reply: "老鸟：客气了，大伙在外面风里雨里的，互相有个照应，别被狗比黑产骗了血汗钱！" }]
+        t: "【群主老鸟】爆料：今天大伙注意江南小区的【张强（男）】，这小子天天搞黑产，故意给外卖差评白嫖餐费，遇到千万别接，直接反手一波举报！",
+        opts: [{ r: "收到，感谢群主排雷，这就拿小本本记下！", fx: "blacklistedBuyer='张强';", reply: "老鸟：客气了，大伙在外面风里雨里的，互相有个照应，别被狗比黑产骗了血汗钱！" }]
     },
     2: {
-        t: "【闪电骑士】爆料：老城区那家【地下城螺蛳粉】出餐极慢而且喜欢缺斤少两，好几个兄弟接了他们的特级大单，结果被买家集体投诉，直接封号扣钱！",
-        opts: [{ r: "收到！看到这家店绕着走！", fx: "blacklistedMerchant='地下城螺蛳粉'; stats.scamAvoided++;", reply: "闪电骑士：没错，出来跑腿别光看悬赏高，商家底子不干净我们就是背锅侠。" }]
+        t: "【闪电骑士】爆料：老城区那家【地下城螺蛳粉】出餐极慢而且克扣菜品，好几个兄弟接了，结果被买家集体投诉餐损！",
+        opts: [{ r: "收到！看到这家店绕着走！", fx: "blacklistedMerchant='地下城螺蛳粉';", reply: "闪电骑士：没错，遇到这家店直接在饿死么里点举报，能赚反诈奖金！" }]
     },
     3: {
-        t: "【同城老王】：急求一个兄弟帮我去南站顶个班送个加急药包，现在大雨我电瓶车没电了，有兄弟顶上去不？可能有风险也可能拿大红包！",
+        t: "【同城老王】：急求一个兄弟帮我去南站顶个班送个加急药包，现在大雨我电瓶车没电了，有兄弟顶上去不？",
         opts: [
-            { r: "【帮兄弟一把】我去！把地址和单子转我！", fx: "if(Math.random()>0.4){ money+=40000; stats.friendHelpEarn+=40000; }else{ money-=20000; };", reply: "（系统测算）你义气顶单！结局：有几率拿到了极高跨城巨额打赏（+4万）或惨遭交警扣车（-2万）。" },
-            { r: "太远了去不了，今天体力跟不上，爱莫能助。", fx: "", reply: "老王：好吧，那我自己推车过去，祝兄弟今天爆单吧。" }
+            { r: "【义气顶单】我去！把单子转我！", fx: "if(Math.random()>0.4){ money+=30000; dayEarn+=30000; showFloatText('顶单成功，获得巨额感谢费3万！'); }else{ money=Math.max(0,money-15000); showFloatText('雨天路滑摔车，药碎了赔款1.5万'); };", reply: "（实时计算）你义气相助！结局会直接反馈在你的资金账户中。" },
+            { r: "太远了去不了，今天体力跟不上。", fx: "", reply: "老王：好吧，那我只能自认倒霉超时了。" }
         ]
     }
 };
 
 const brotherStories = {
     1: {
-        t: "兄弟！听哥们说，老家王大拿那群人天天在村里狗仗人势，我都看不下去了。哥们最近在城里跟几个大哥做虚拟币和地下夜场清算，稳得很。你借我5万块周转，过几天翻倍还你！",
+        t: "兄弟！老家王大拿那群人天天在村里狗仗人势，我都看不下去了。哥们最近在城里跟几个大哥做地下清算，稳得很。你借我5万块周转，过几天翻倍还你！",
         opts: [
-            { r: "【信任死党】行！卡里正好有钱，兄弟拿去用，帮我狠狠打他们的脸！", fx: "if(money>=50000){ money-=50000; chatHistories.brother.push({sender:'them',text:'【重磅后续】第15天铁柱由于涉嫌经济诈骗被刑拘了，你的5万块彻底打水漂！'}); }else{ alert('钱不够，死党转账失败！'); }", reply: "铁柱：讲义气！等我好消息，等哥们带你住别墅！" },
-            { r: "铁子，不是不借，我这是娶媳妇的救命彩礼钱，实在不能动。", fx: "", reply: "铁柱：唉，理解理解，那你继续风吹日晒吧，有需要随时找我。" }
+            { r: "【信任死党】行！卡里正好有钱，兄弟拿去用！", fx: "if(money>=50000){ money-=50000; dayEarn-=50000; chatHistories.brother.push({sender:'them',text:'【后续坏消息】第12天，铁柱涉嫌非法集资被捕，你的5万块彻底打水漂。'}); }else{ alert('你卡里的钱还不够5万，无法转账！'); }", reply: "铁柱：讲义气！等我好消息，等哥们带你住别墅！" },
+            { r: "铁子，这是我娶媳妇的救命彩礼钱，实在不能动。", fx: "", reply: "铁柱：唉，理解理解，那你继续风吹日晒吧，有需要随时找我。" }
         ]
     }
 };
@@ -558,7 +566,6 @@ function enterChatRoom(type) {
     const room = document.getElementById('chat-room-app');
     room.classList.add('active');
     
-    // 设置标题
     const titles = { cuihua: "翠花 (未婚妻)", group: "外卖骑士情报交流群", brother: "铁柱 (好兄弟)" };
     document.getElementById('chat-room-title').innerText = titles[type];
     
@@ -570,7 +577,6 @@ function renderChatMessages() {
     const optArea = document.getElementById('chat-options-area');
     box.innerHTML = '';
     
-    // 加载历史
     chatHistories[currentChattingType].forEach(m => {
         const d = document.createElement('div');
         d.className = m.sender === 'me' ? 'chat-bubble mine' : 'chat-bubble';
@@ -578,14 +584,12 @@ function renderChatMessages() {
         box.appendChild(d);
     });
     
-    // 判断今天是否已经交互过
     if (hasChattedToday[currentChattingType]) {
-        optArea.innerHTML = `<div style="text-align:center; color:#999; font-size:11px; padding:6px;">对方暂时不在线或正在忙碌...</div>`;
+        optArea.innerHTML = `<div style="text-align:center; color:#999; font-size:11px; padding:6px;">对方暂时不在线...</div>`;
         box.scrollTop = box.scrollHeight;
         return;
     }
     
-    // 获取剧情
     let story;
     if (currentChattingType === 'cuihua') {
         story = cuihuaStories[day] ? cuihuaStories[day] : cuihuaStories[1]; 
@@ -596,7 +600,6 @@ function renderChatMessages() {
         story = brotherStories[1];
     }
     
-    // 渲染提示
     const promptDiv = document.createElement('div');
     promptDiv.className = 'chat-bubble';
     promptDiv.style.background = "#fff3cd";
@@ -616,30 +619,26 @@ function renderChatMessages() {
 }
 
 function confirmChatReply(opt, originalText) {
-    // 玩家回复
     chatHistories[currentChattingType].push({ sender: 'me', text: opt.r });
     
-    // 执行效果
-    eval(opt.fx);
+    eval(opt.fx); // 直接影响真实数据
     hasChattedToday[currentChattingType] = true;
     
     renderChatMessages();
     
-    // 延迟npc回复
     setTimeout(() => {
         chatHistories[currentChattingType].push({ sender: 'them', text: opt.reply });
-        // 更新最后一条消息快照
         document.getElementById('last-msg-' + currentChattingType).innerText = opt.reply;
         renderChatMessages();
         updateUI();
     }, 600);
 }
 
-// --- 财富密码App (3款极速翻倍菠菜游戏) ---
+// --- 财富密码App ---
 function getGambleBet(id) {
     let amt = parseInt(document.getElementById(id).value);
     if (isNaN(amt) || amt <= 0) { alert("请输入正确的押注金额！"); return 0; }
-    if (amt > money) { alert("疯狂行为！你卡里的钱根本不够这一次的押注！"); return 0; }
+    if (amt > money) { alert("你卡里的钱不够这一次的押注！"); return 0; }
     return amt;
 }
 
@@ -649,135 +648,74 @@ function playRPS(userChoice) {
     
     const rps = ["石头", "剪刀", "布"];
     let aiChoice = rps[Math.floor(Math.random() * 3)];
-    let result = "";
-    
-    if (userChoice === aiChoice) {
-        result = "平局";
-    } else if (
+    let result = (userChoice === aiChoice) ? "平局" : (
         (userChoice === "石头" && aiChoice === "剪刀") ||
         (userChoice === "剪刀" && aiChoice === "布") ||
         (userChoice === "布" && aiChoice === "石头")
-    ) {
-        result = "赢";
-    } else {
-        result = "输";
-    }
+    ) ? "赢" : "输";
     
-    if (result === "赢") {
-        money += bet; stats.gambleWins++;
-        showFloatText(`✊ 猜拳大胜！AI出了[${aiChoice}]，你出了[${userChoice}]！净赚 +￥${bet}`);
-    } else if (result === "输") {
-        money -= bet; stats.gambleLosses++;
-        showFloatText(`😭 猜拳惨败！AI出了[${aiChoice}]，你出了[${userChoice}]！痛失 -￥${bet}`);
-    } else {
-        showFloatText(`👔 双方都是[${userChoice}]，平局，本金退回。`);
-    }
+    if (result === "赢") { money += bet; stats.gambleWins++; showFloatText(`✊ 猜拳赢！AI出[${aiChoice}]！赚 +￥${bet}`); }
+    else if (result === "输") { money -= bet; stats.gambleLosses++; showFloatText(`😭 猜拳输！AI出[${aiChoice}]！失 -￥${bet}`); }
+    else { showFloatText(`👔 平局，本金退回。`); }
     updateUI();
 }
 
 function playDice(userGuess) {
     let bet = getGambleBet('bet-dice');
     if(bet <= 0) return;
-    
     let points = Math.floor(Math.random() * 6) + 1;
     let finalResult = points >= 4 ? "大" : "小";
-    
-    if (userGuess === finalResult) {
-        money += bet; stats.gambleWins++;
-        showFloatText(`🎲 骰子买中！骰子开出 [${points}点 - ${finalResult}]！资产暴涨 +￥${bet}`);
-    } else {
-        money -= bet; stats.gambleLosses++;
-        showFloatText(`💸 财富蒸发！骰子开出 [${points}点 - ${finalResult}]！输掉 -￥${bet}`);
-    }
+    if (userGuess === finalResult) { money += bet; stats.gambleWins++; showFloatText(`🎲 买中！开出 [${points}点-${finalResult}]！赚 +￥${bet}`); }
+    else { money -= bet; stats.gambleLosses++; showFloatText(`💸 洗白！开出 [${points}点-${finalResult}]！输 -￥${bet}`); }
     updateUI();
 }
 
 function playColor(userGuess) {
     let bet = getGambleBet('bet-color');
     if(bet <= 0) return;
-    
     let rand = Math.random();
     let cardColor = rand > 0.5 ? "红" : "黑";
     let cardType = rand > 0.5 ? "♥️红桃J" : "♠️黑桃K";
-    
-    if (userGuess === cardColor) {
-        money += bet; stats.gambleWins++;
-        showFloatText(`🃏 盲猜大中！翻开暗牌是 [${cardType}]！暴赚 +￥${bet}`);
-    } else {
-        money -= bet; stats.gambleLosses++;
-        showFloatText(`🩸 瞬间洗白！翻开暗牌是 [${cardType}]！输掉 -￥${bet}`);
-    }
+    if (userGuess === cardColor) { money += bet; stats.gambleWins++; showFloatText(`🃏 猜中！翻开是 [${cardType}]！赚 +￥${bet}`); }
+    else { money -= bet; stats.gambleLosses++; showFloatText(`🩸 踩雷！翻开是 [${cardType}]！输 -￥${bet}`); }
     updateUI();
 }
 
 // --- 基础结算与UI控制流 ---
 function showDayEndSettlement() {
-    document.getElementById('settle-day-title').innerText = `--- 第 ${day} 天 终了账单与故乡来信 ---`;
+    document.getElementById('settle-day-title').innerText = `--- 第 ${day} 天 终了账单 ---`;
     document.getElementById('settle-earn').innerText = `￥${dayEarn.toLocaleString()}`;
     document.getElementById('settle-stamina').innerText = `${dayStaminaCost} 点`;
     document.getElementById('settle-total').innerText = `￥${money.toLocaleString()}`;
     
-    let text = "";
-    if (money >= 1000000) {
-        text = "🔥 你太疯狂了！卡里已经存够了100万！此时此刻你完全可以不再受罪，提着满满一箱现金提前准备风光回村！";
-    } else if (dayEarn > 50000) {
-        text = "👑 今日战神！你成功利用风控群情报避开了所有霸王餐买家，同时在财富密码App里精准杀猪，赚翻了！";
-    } else if (dayEarn > 0) {
-        text = "💪 稳打稳扎，你具备一个成熟骑手的直觉，垃圾欺诈单根本骗不到你的汗水。";
-    } else {
-        text = "📈 今天在接单大厅非常保守（可能躺平了），或者是财富密码软件把你割了个底朝天。";
-    }
-    
+    let text = money >= 1000000 ? "🔥 你存够了100万彩礼！随时准备风光回村！" : 
+               dayEarn > 50000 ? "👑 今日战神！通过精准举报和暴利单狠狠大赚了一笔！" : "💪 稳扎稳打，你正朝着目标不断前进。";
     document.getElementById('settle-evaluation').innerText = text;
     document.getElementById('day-end-modal').style.display = 'flex';
 }
 
 function startNextDay() {
     document.getElementById('day-end-modal').style.display = 'none';
-    day++;
-    dayEarn = 0;
-    dayStaminaCost = 0;
-    stamina = 100;
-    actionsLeft = 10;
-    
-    // 重置黑名单爆料（每天都不同）
-    blacklistedBuyer = "";
-    blacklistedMerchant = "";
-    
-    // 重置聊天红点和触发
+    day++; dayEarn = 0; dayStaminaCost = 0; stamina = 100; actionsLeft = 10;
+    blacklistedBuyer = ""; blacklistedMerchant = "";
     hasChattedToday = { cuihua: false, group: false, brother: false };
     chatBadgeStates = { cuihua: true, group: true, brother: true };
     refreshTotalBadge();
     
-    if (day > 30) {
-        endGame();
-    } else {
-        updateUI();
-        openApp('home-screen');
-    }
+    if (day > 30) endGame();
+    else { updateUI(); openApp('home-screen'); }
 }
 
 function endGame() {
     const isWin = money >= 1000000;
     document.getElementById('end-title').innerText = isWin ? "🎉 绝地逆袭！迎娶白富美！" : "😭 残酷终局：命运的抛弃";
-    
-    let desc = "";
-    if (isWin) {
-        desc = `最终资产：￥${money.toLocaleString()}！你用智慧识破了黑产骗局，亦或是在神秘软件中疯狂梭哈。在第31天的清晨，你开着崭新的迈巴赫轰鸣着开进村口，把100万现金在丈母娘和王大拿面前直接拍碎在桌上！王大拿脸色铁青，丈母娘当场帮你擦鞋。翠花抱着你哭得梨花带雨，你们的婚礼放了七天七夜鞭炮！`;
-    } else {
-        desc = `最终资产：￥${money.toLocaleString()}。三十天期限已满，100万彩礼成了不可逾越的鸿沟。第31天的清晨，天上下着大雨，你躲在村头草丛里，亲眼看到翠花穿着洁白的婚纱、满眼红肿绝望地坐上了王大拿那辆挂着大红花的宝马5系。你手里的外卖餐盒摔在泥地里，一无所有……`;
-    }
+    let desc = isWin ? `最终资产：￥${money.toLocaleString()}！你用智慧识破了黑产骗局并靠举报奖金逆袭。你开着豪车回村把100万彩礼拍在桌上，娶到了翠花！` : `最终资产：￥${money.toLocaleString()}。你没能在30天内凑够100万，翠花最终在大雨中坐上了王大拿的迎亲车……`;
     document.getElementById('end-desc').innerText = desc;
     
-    // 动态多维成就
     const achieveList = document.getElementById('achieve-list');
     let aHtml = "";
-    if (isWin) aHtml += `<div class="achieve-item">🏆【百万大亨】：成功在30天逆天改命赚够彩礼。</div>`;
-    if (stats.gambleWins > 15) aHtml += `<div class="achieve-item">🏆【赌神再世】：在财富密码软件中疯狂斩获高额利润。</div>`;
-    if (stats.gambleLosses > 15) aHtml += `<div class="achieve-item">🏆【韭菜之王】：明明是彩礼钱，你却在海外加密软件里输个精光。</div>`;
-    if (stats.scamAvoided > 0) aHtml += `<div class="achieve-item">🏆【反诈先锋】：通过阅读QQ群防雷爆料，多次完美避开高风险订单。</div>`;
-    if (stats.scamFines > 100000) aHtml += `<div class="achieve-item">🏆【赛博散财童子】：累计被职业霸王餐、碰瓷黑产敲诈勒索超过10万元。</div>`;
-    
+    if (isWin) aHtml += `<div class="achieve-item">🏆【百万大亨】：成功在30天赚够彩礼。</div>`;
+    if (stats.successfulReports > 5) aHtml += `<div class="achieve-item">🏆【正义神探】：通过精准举报黑产狂捞奖金。</div>`;
     achieveList.innerHTML = aHtml || `<div class="achieve-item">🏆【平平淡淡】：完成了一个月的外卖生涯。</div>`;
     document.getElementById('end-modal').style.display = 'flex';
 }
@@ -786,10 +724,8 @@ function updateUI() {
     document.getElementById('ui-day').innerText = day > 30 ? 30 : day;
     document.getElementById('ui-stamina').innerText = stamina;
     document.getElementById('ui-orders').innerText = actionsLeft;
-    
     document.getElementById('bank-money').innerText = money.toLocaleString();
     document.getElementById('gamble-money-display').innerText = money.toLocaleString();
-    
     let lack = 1000000 - money;
     document.getElementById('bank-lack').innerText = lack < 0 ? "0" : lack.toLocaleString();
 }
@@ -799,26 +735,16 @@ function refreshTotalBadge() {
     if (chatBadgeStates.cuihua) { count++; document.getElementById('badge-cuihua').style.display = 'block'; }
     if (chatBadgeStates.group) { count++; document.getElementById('badge-group').style.display = 'block'; }
     if (chatBadgeStates.brother) { count++; document.getElementById('badge-brother').style.display = 'block'; }
-    
     const total = document.getElementById('qq-total-badge');
-    if (count > 0) {
-        total.innerText = count;
-        total.style.display = 'block';
-    } else {
-        total.style.display = 'none';
-    }
+    if (count > 0) { total.innerText = count; total.style.display = 'block'; }
+    else { total.style.display = 'none'; }
 }
 
 function openApp(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    
-    if (id === 'delivery-app') {
-        generateThreeOrders();
-    }
-    if (id === 'chat-index-app') {
-        refreshTotalBadge();
-    }
+    if (id === 'delivery-app') generateThreeOrders();
+    if (id === 'chat-index-app') refreshTotalBadge();
 }
 
 function showFloatText(text) {
@@ -833,13 +759,11 @@ function showFloatText(text) {
     setTimeout(() => tip.remove(), 2200);
 }
 
-// 模拟时钟
 setInterval(() => {
     let d = new Date();
     document.getElementById('clock').innerText = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0');
 }, 1000);
 
-// 初始化
 updateUI();
 refreshTotalBadge();
 </script>
